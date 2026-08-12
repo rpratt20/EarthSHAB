@@ -20,7 +20,7 @@ from EarthSHAB.Plotting.plot_windmap import plot_windmap
 
 def predict():
     coord = config_earth.simulation['start_coord']
-    masses = [0, .25, .5, .75, 1, 1.25, 1.5, 1.75, 2]
+    masses = [0, .25, .5, 1, 2]
 
     cmap = mpl.colormaps['rainbow_r']
     colors = cmap(np.linspace(0, 1, len(masses)))

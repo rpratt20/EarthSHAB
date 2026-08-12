@@ -36,7 +36,7 @@ def _load_aprs(path: str) -> tuple:
 
     if "time" in cols and "lat" in cols and "lng" in cols and "altitude" in cols:
         df["time"] = pd.to_datetime(df["time"])
-        df["time"] = df["time"] - pd.to_timedelta(7, unit="h")
+        df["time"] = df["time"] - pd.to_timedelta(5, unit="h")
         df["dt"] = (
             df["time"].diff()
             .apply(lambda x: x / np.timedelta64(1, "s"))
@@ -110,7 +110,7 @@ def _load_aprs(path: str) -> tuple:
     raise ValueError(f"Unrecognized APRS file format. Columns found: {sorted(cols)}")
 
 
-def _assert_trajectory_within_forecast(df, model_start_datetime, model_end_datetime, gmt_offset_hours=7):
+def _assert_trajectory_within_forecast(df, model_start_datetime, model_end_datetime, gmt_offset_hours=5):
     """Fatal-exit if the balloon trajectory's recorded time span falls outside the forecast.
 
     ``df['time']`` holds the trajectory's real timestamps in local time — the
@@ -146,7 +146,7 @@ class BalloonSimulation:
     def __init__(self):
         self.scriptstartTime = tm.time()
 
-        self.GMT = 7  # 0 # UTC MST
+        self.GMT = 5  # 0 # UTC CDT
         self.dt = config_earth.simulation['dt']
         self.coord = config_earth.simulation['start_coord']
         self.t = config_earth.simulation['start_time']

@@ -4,18 +4,18 @@ MonkeyPatch.patch_fromisoformat()     # Hacky solution for Python 3.6 to use ISO
 
 balloon_properties = dict(
     shape = 'sphere',
-    d = 5.8,                          # (m) Diameter of Sphere Balloon
-    mp = 0.9,                         # (kg) Mass of Payload
+    d = 3.47,                          # (m) Diameter of Sphere Balloon
+    mp = 0.3,                         # (kg) Mass of Payload
     areaDensityEnv = 939.*7.87E-6,    # (Kg/m^2) rhoEnv*envThickness
-    mEnv = 2.1,                       # (kg) Mass of Envelope - SHAB1
+    mEnv = .25,                       # (kg) Mass of Envelope - KJ0RE
     cp = 2000.,                       # (J/(kg K)) Specific heat of envelope material
     absEnv = .93,                     # Absorbiviy of envelope material
     emissEnv = .92,                   # Emisivity of enevelope material
-    Upsilon = 4.5,                    # Ascent Resistance coefficient
+    Upsilon = 2.5,                    # Ascent Resistance coefficient
 )
 
-parent_dir = "src/EarthSHAB/"
-
+parent_dir = "EarthSHAB/"
+"""
 # SHAB14-V Example for EarthSHAB software. Runs main.py against the bundled
 # SHAB14-V flight (GFS + APRS truth track) so the prediction can be compared to
 # the real trajectory; the same flight is registered in evaluation/launches.json
@@ -25,6 +25,20 @@ parent_dir = "src/EarthSHAB/"
 forecast_start_time =  "2022-08-22 12:00:00" # Forecast start time, should match a downloaded forecast in the forecasts directory
 start_time = datetime.fromisoformat("2022-08-22 14:36:00") # Simulation start time. The end time needs to be within the downloaded forecast
 balloon_trajectory = parent_dir + "balloon_data/SHAB14V-APRS.csv"  # Only Accepting Files in the Standard APRS.fi format for now
+"""
+"""
+# KJ0RE-3 Example for EarthSHAB software. Runs main.py against the bundled
+# KJ0RE-3 GPSL26 flight (GFS + APRS truth track) so the prediction can be compared to
+# the real trajectory; the same flight is registered in evaluation/launches.json
+forecast_start_time =  "2026-06-20 06:00:00" # Forecast start time, should match a downloaded forecast in the forecasts directory
+start_time = datetime.fromisoformat("2026-06-20 13:30:00") # Simulation start time. The end time needs to be within the downloaded forecast
+balloon_trajectory = parent_dir + "balloon_data/KJ0RE-3-GPSL26.csv"  # Only Accepting Files in the Standard APRS.fi format for now
+"""
+
+# KJ0RE daily run for EarthSHAB software. Runs against current forecast.
+forecast_start_time =  "2026-07-19 06:00:00" # Forecast start time, should match a downloaded forecast in the forecasts directory
+start_time = datetime.fromisoformat("2026-07-19 12:00:00") # Simulation start time. The end time needs to be within the downloaded forecast
+balloon_trajectory = ""  # Only Accepting Files in the Standard APRS.fi format for now
 
 # Single forecast file path. The reader (EarthSHAB.Forecast.Forecast) opens
 # this file regardless of whether it came from GFS or ERA5 — source is read
@@ -101,8 +115,8 @@ netcdf_gfs = dict(
     res = _gfs_res,    # (deg) GFS grid resolution: 0.25, 0.5, or 1.0. Must match
                        #     the value used to build nc_file above (_gfs_res).
 
-    lat_range = 40,    # (deg) bounding-box height to download
-    lon_range= 60,     # (deg) bounding-box width to download
+    lat_range = 20,    # (deg) bounding-box height to download
+    lon_range= 30,     # (deg) bounding-box width to download
     download_days = 1, # (1-10) forecast horizon in days
 
     step_hours = _gfs_step_hours,  # (h) temporal resolution of forecast steps to
@@ -121,14 +135,15 @@ simulation = dict(
     vent = 0.0,                 # (kg/s) Vent Mass Flow Rate  (Do not have an accurate model of the vent yet, this is innacurate)
     alt_sp = 15000.0,           # (m) Altitude Setpoint
     v_sp = 0.,                  # (m/s) Altitude Setpoint, Not Implemented right now
-    start_coord =	{
-                      "lat": 34.60,             # (deg) Latitude
-                      "lon": -106.80,           # (deg) Longitude
-                      "alt": 1000.,             # (m) Elevation
+start_coord =	{
+                      "lat": 43.71,             # (deg) Latitude
+                      "lon": -98.008,           # (deg) Longitude
+                      "alt": 395.,             # (m) Elevation
                       "timestamp": start_time,  # current timestamp
                     },
-    min_alt = 1000.,            # starting altitude. Generally the same as initial coordinate
-    float = 23000,              # for simulating in trapezoid.py
+
+    min_alt = 395.,            # starting altitude. Generally the same as initial coordinate
+    float = 22000,              # for simulating in trapezoid.py
     dt = 1.0,                   # (s) Integration timestep for simulation (If error's occur, use a lower step size)
 
     balloon_trajectory = balloon_trajectory # Default is None. Only accepting trajectories in aprs.fi csv format.

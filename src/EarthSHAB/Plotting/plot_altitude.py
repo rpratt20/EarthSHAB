@@ -26,7 +26,7 @@ def plot_altitude_family(time_locals, elevations, masses, colors):
     for j, (time_local, el) in enumerate(zip(time_locals, elevations)):
         ax.plot(time_local, el, mpl.colors.rgb2hex(colors[j]), label=f"{masses[j]} kg")
 
-    plt.xlabel('Datetime (MST)')
+    plt.xlabel('Datetime (CDT)')
     plt.ylabel('Elevation (m)')
     ax.get_xaxis().set_minor_locator(mpl.ticker.AutoMinorLocator())
     ax.get_yaxis().set_minor_locator(mpl.ticker.AutoMinorLocator())
